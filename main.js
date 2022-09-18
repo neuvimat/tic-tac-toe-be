@@ -1,5 +1,14 @@
 const WebSocket = require('ws');
-const port = process.env.PORT || 5001
+let config = require('./config')
+
+try {
+    localConfig = require('./config.local')
+    config = {...config, ... localConfig}
+}
+catch (e) {
+    console.info('No local configuration file found. (If you wish to create one, name it config.local.js)');
+}
+const port = process.env.PORT || config.PORT
 const wss = new WebSocket.Server({port: port});
 
 const GameBank = new (require('./GameBank'))()
